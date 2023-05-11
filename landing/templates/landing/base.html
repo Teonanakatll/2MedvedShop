@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="{% static 'landing/img/favicon.ico' %}" type="image/x-icon"/>
+
+  <link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
+  <!--  Шрифт Roboto  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,300&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
+
+  <script src="{% static 'landing/js/dev.jQuery-3x.js' %}"></script>
+
+  <title>Medved-Shop</title>
+
+</head>
+<body>
+
+  <div class="wrapper">
+    <div class="wrapper-content">
+
+
+      {% block content %}
+
+      {% endblock content %}
+
+    </div>
+  </div>
+      <script src="{% static 'landing/js/bootstrap.bundle.min.js' %}"></script>
+
+  <script src="{% static 'landing/js/scripts.js' %}"></script>
+</body>
