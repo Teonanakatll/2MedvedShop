@@ -22,20 +22,25 @@
 
 </head>
 <body>
-  <h1 class="title">Hello!</h1>
-  <h1 class="title">How are you?</h1>
-
-  <div class="wrapper">
-    <div class="wrapper-content">
 
 
-      {% block content %}
-
-      {% endblock content %}
-
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2">
+        <h1 class="title">Наш магазин скоро откроется</h1>
+        <h1 class="title">Оставляйте Ваш имейл в форме ниже</h1>
+        <div>
+          <form action="" method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <div>
+              <button type="submit" class="btn btn-sm btn-primary">Отправить</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
-      <script src="{% static 'landing/js/bootstrap.bundle.min.js' %}"></script>
 
+  <script src="{% static 'landing/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'landing/js/scripts.js' %}"></script>
 </body>

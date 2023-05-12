@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+ <script src="https://bootstraptema.ru/plugins/2018/particles/particles.js"></script>
+
+ <script type="text/javascript">
+ particlesJS.load('particles', 'https://bootstraptema.ru/plugins/2018/particles/particles.json');
+ </script>
+
+
+
+</head>
+<body>
+
+<style>
+ #flex--bootstrap {
+ height:100vh
+ }
+ #block--svg {
+ fill:#694198;
+ z-index:2
+ }
+ svg{
+ max-width:100px
+ }
+ #particles {
+ position: absolute;
+ top: 0px;
+ bottom: 0px;
+ left: 0px;
+ right: 0px;
+ overflow: hidden;
+ background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+ z-index:0
+ }
+</style>
+
+<div id="particles">kkk</div>
+
+<div id="flex--bootstrap" class="d-flex flex-row align-items-center justify-content-between">
+ <div>what</div>
+ <div id="block--svg"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M13.333 0H2.667A2.675 2.675 0 0 0 0 2.667v10.666C0 14.8 1.2 16 2.667 16h10.666C14.8 16 16 14.8 16 13.333V2.667C16 1.2 14.8 0 13.333 0zm-1.458 11.237a2.07 2.07 0 0 1-.615.823c-.28.23-.635.413-1.072.55-.436.135-.954.203-1.555.203H4.345V3.477H8.88c.838 0 1.51.19 2.014.575.505.385.758.962.758 1.74 0 .47-.115.872-.345 1.207-.23.33-.56.59-.988.77v.03c.57.12 1.01.39 1.3.81.29.42.44.95.44 1.59 0 .36-.07.7-.2 1.02zm-1.85-2.3c-.273-.25-.658-.372-1.154-.372H5.99v2.912h2.89c.495 0 .882-.128 1.154-.387.275-.256.413-.622.413-1.093-.002-.46-.14-.815-.413-1.06zm-.4-1.883c.263-.223.393-.544.393-.962 0-.47-.117-.803-.353-.994-.235-.19-.575-.288-1.02-.288H5.98v2.576h2.666c.392 0 .72-.113.98-.332z"/></svg>
+</div>
+ <div></div>
+</div>
+
+<canvas class="particles-js-canvas-el" width="697" height="298" style="width: 100%; height: 100%;"></canvas>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+<style>
+@import url(https://fonts.googleapis.com/css?family=Finger+Paint);
+.container-fluid {
+ background: black;
+ overflow: hidden;
+ font: 5vw/100vh "Finger Paint";
+ text-align: center;
+ color: transparent;
+ backface-visibility: hidden;
+}
+span {
+ display: inline-block;
+ text-shadow: 0 0 0 whitesmoke;
+ animation: smoky 5s 3s both;
+}
+span:nth-child(even) {
+ animation-name: smoky-mirror;
+}
+@keyframes smoky {
+ 60% {
+ text-shadow: 0 0 40px whitesmoke;
+ }
+ to {
+ transform: translate3d(15rem, -8rem, 0) rotate(-40deg) skewX(70deg) scale(1.5);
+ text-shadow: 0 0 20px whitesmoke;
+ opacity: 0;
+ }
+}
+@keyframes smoky-mirror {
+ 60% {
+ text-shadow: 0 0 40px whitesmoke;
+ }
+ to {
+ transform: translate3d(18rem, -8rem, 0) rotate(-40deg) skewX(-70deg) scale(2);
+ text-shadow: 0 0 20px whitesmoke;
+ opacity: 0;
+ }
+}
+span:nth-of-type(1) {
+ animation-delay: 3.1s;
+}
+span:nth-of-type(2) {
+ animation-delay: 3.2s;
+}
+span:nth-of-type(3) {
+ animation-delay: 3.3s;
+}
+span:nth-of-type(4) {
+ animation-delay: 3.4s;
+}
+span:nth-of-type(5) {
+ animation-delay: 3.5s;
+}
+span:nth-of-type(6) {
+ animation-delay: 3.6s;
+}
+span:nth-of-type(7) {
+ animation-delay: 3.7s;
+}
+span:nth-of-type(8) {
+ animation-delay: 3.8s;
+}
+span:nth-of-type(9) {
+ animation-delay: 3.9s;
+}
+span:nth-of-type(10) {
+ animation-delay: 4s;
+}
+span:nth-of-type(11) {
+ animation-delay: 4.1s;
+}
+span:nth-of-type(12) {
+ animation-delay: 4.2s;
+}
+span:nth-of-type(13) {
+ animation-delay: 4.3s;
+}
+</style>
+
+<div class="container-fluid h1 text-center">
+
+<span>B</span><span>o</span><span>o</span><span>t</span><span>s</span><span>t</span><span>r</span><span>a</span><span>p</span><span>T</span><span>e</span><span>m</span><span>a</span>
+
+
+
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+<script src="//bootstraptema.ru/snippets/effect/2018/confettikit/randomColor.js"></script>
+<script src="//bootstraptema.ru/snippets/effect/2018/confettikit/confettikit.min.js"></script>
+
+<style>
+/* - only demo - */
+body {
+background-image: url('//bootstraptema.ru/snippets/effect/2018/confettikit/bg.png');
+}
+.btn {
+display: inline-block;
+border: none;
+border-radius: .3em;
+box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 -0.25em 0 rgba(0, 0, 0, 0.25), 0 0.25em 0.25em rgba(0, 0, 0, 0.05);
+cursor: pointer;
+font-weight: 300;
+line-height: 1.5;
+letter-spacing: 1px;
+padding: .5em 1.5em .75em;
+position: relative;
+text-decoration: none;
+text-shadow: 0 1px 1px rgba(255, 255, 255, 0.25);
+vertical-align: middle;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+.btn:active {
+outline: none;
+box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2), inset 0 2px 0 rgba(255, 255, 255, 0.1), inset 0 0.25em 0.5em rgba(0, 0, 0, 0.05);
+margin-top: .25em;
+padding-bottom: .5em;
+}
+.mt{margin-top:100px}
+@media only screen and (max-width: 767px){
+.mt{margin-top:13px}
+.mt h1{margin-top:5px}
+.pd{padding:13px}
+}
+</style>
+
+ <div class="container">
+
+<div class="row">
+ <div class="col-md-12 col-xs-12 col-sm-12 text-center mt">
+ <h1>Эффект конфетти для кнопок</h1>
+ </div>
+</div>
+
+ <div class="row mt">
+ <div class="col-md-4 col-xs-12 col-sm-4 text-center pd">
+ <button id="bottom-btn" class="btn">Happy Birthday</button>
+ </div>
+ <div class="col-md-4 col-xs-12 col-sm-4 text-center pd">
+ <button id="btn" class="btn">Magic Button</button>
+ </div>
+ <div class="col-md-4 col-xs-12 col-sm-4 text-center pd">
+ <button id="top-btn" class="btn">Celebration</button>
+ </div>
+ </div>
+
+ <div class="row mt">
+ <div class="col-md-4 col-xs-12 col-sm-4 text-center pd">
+ <button id="text-btn" class="btn">Custom Text</button>
+ </div>
+ <div class="col-md-4 col-xs-12 col-sm-4 text-center pd">
+ <button id="image-btn" class="btn">Custom Image</button>
+ </div>
+ <div class="col-md-4 col-xs-12 col-sm-4 text-center pd">
+ <button id="svg-btn" class="btn">Custom SVG</button>
+ </div>
+ </div>
+
+ <div class="row mt">
+ <div class="col-md-12 col-xs-12 col-sm-12 text-center pd">
+ <button id="multiple-btn" class="btn">Multiple Custom</button>
+ </div>
+ </div>
+
+ </div>
+
+ <script>
+ //Happy Birthday
+ document.querySelector('#bottom-btn').addEventListener('click', function (e) {
+
+ new confettiKit({
+ confettiCount: 40,
+ angle: 90,
+ startVelocity: 50,
+ colors: randomColor({hue: 'blue',count: 18}),
+ elements: {
+ 'confetti': {
+ direction: 'down',
+ rotation: true,
+ },
+ 'star': {
+ count: 10,
+ direction: 'down',
+ rotation: true,
+ },
+ 'ribbon': {
+ count: 5,
+ direction: 'down',
+ rotation: true,
+ },
+ 'custom': [{
+ count: 1,
+ width: 50,
+ textSize: 15,
+ content: '//bootstraptema.ru/snippets/effect/2018/confettikit/shar.png',
+ contentType: 'image',
+ direction: 'up',
+ rotation: false,
+ }]
+ },
+ position: 'bottomLeftRight',
+ });
+ });
+
+ //magic button
+ document.querySelector('#btn').addEventListener('click', function (e) {
+
+ new confettiKit({
+ confettiCount: 40,
+ angle: 90,
+ startVelocity: 50,
+ elements: {
+ 'confetti': {
+ direction: 'down',
+ rotation: true,
+ },
+ 'star': {
+ count: 10,
+ direction: 'down',
+ rotation: true,
+ },
+ 'ribbon': {
+ count: 5,
+ direction: 'down',
+ rotation: true,
+ },
+ },
+ x: e.clientX,
+ y: e.clientY
+ });
+ });
+
+ //Celebration
+ document.querySelector('#top-btn').addEventListener('click', function (e) {
+
+ new confettiKit({
+ colors:randomColor({hue:'pink',count: 18}),
+ confettiCount: 40,
+ angle: 90,
+ startVelocity: 50,
+ elements: {
+ 'confetti': {
+ direction: 'down',
+ rotation: true,
+ },
+ 'star': {
+ count: 10,
+ direction: 'down',
+ rotation: true,
+ },
+ 'ribbon': {
+ count: 5,
+ direction: 'down',
+ rotation: true,
+ },
+ },
+ position: 'topLeftRight',
+ });
+ });
+
+ //Custom Text
+ document.querySelector('#text-btn').addEventListener('click', function (e) {
+ new confettiKit({
+ confettiCount: 40,
+ angle: 90,
+ startVelocity: 50,
+ elements: {
+ 'confetti': {
+ direction: 'down',
+ rotation: true,
+ },
+ 'star': {
+ count: 10,
+ direction: 'down',
+ rotation: true,
+ },
+ 'ribbon': {
+ count: 5,
+ direction: 'down',
+ rotation: true,
+ },
+ 'custom': [{
+ count: 10,
+ width: 25,
+ textSize: 15,
+ content: 'BootstrapTema',
+ contentType: 'text',
+ direction: 'down',
+ rotation: true,
+ }]
+ },
+ x: e.clientX,
+ y: e.clientY
+ });
+ });
+
+ //Custom Image
+ document.querySelector('#image-btn').addEventListener('click', function (e) {
+ new confettiKit({
+ confettiCount: 40,
+ angle: 90,
+ startVelocity: 50,
+ elements: {
+ 'confetti': {
+ direction: 'down',
+ rotation: true,
+ },
+ 'star': {
+ count: 10,
+ direction: 'down',
+ rotation: true,
+ },
+ 'ribbon': {
+ count: 5,
+ direction: 'down',
+ rotation: true,
+ },
+ 'custom': [{
+ count: 50,
+ width: 25,
+ textSize: 15,
+ content: '//bootstraptema.ru/snippets/effect/2018/confettikit/FlowerClipart.png',
+ contentType: 'image',
+ direction: 'down',
+ rotation: true,
+ }]
+ },
+ x: e.clientX,
+ y: e.clientY
+ });
+ });
+
+ var svgSource = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"><script xmlns="" id="tinyhippos-injected"/><g><g><path d="M32,271.692v192c0,17.664,14.368,32,32,32h160v-224H32z"/></g></g><g><g><path d="M480,143.692H378.752c7.264-4.96,13.504-9.888,17.856-14.304c25.824-25.952,25.824-68.192,0-94.144 c-25.088-25.28-68.8-25.216-93.856,0c-13.888,13.92-50.688,70.592-45.6,108.448h-2.304c5.056-37.856-31.744-94.528-45.6-108.448 c-25.088-25.216-68.8-25.216-93.856,0C89.6,61.196,89.6,103.436,115.36,129.388c4.384,4.416,10.624,9.344,17.888,14.304H32 c-17.632,0-32,14.368-32,32v48c0,8.832,7.168,16,16,16h208v-64h64v64h208c8.832,0,16-7.168,16-16v-48 C512,158.06,497.664,143.692,480,143.692z M222.112,142.636c0,0-1.344,1.056-5.92,1.056c-22.112,0-64.32-22.976-78.112-36.864 c-13.408-13.504-13.408-35.52,0-49.024c6.496-6.528,15.104-10.112,24.256-10.112c9.12,0,17.728,3.584,24.224,10.112 C208.128,79.5,229.568,134.924,222.112,142.636z M295.776,143.692c-4.544,0-5.888-1.024-5.888-1.056 c-7.456-7.712,13.984-63.136,35.552-84.832c12.896-13.024,35.456-13.088,48.48,0c13.44,13.504,13.44,35.52,0,49.024 C360.128,120.716,317.92,143.692,295.776,143.692z"/></g></g><g><g><path d="M288,271.692v224h160c17.664,0,32-14.336,32-32v-192H288z"/></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>';
+ document.querySelector('#svg-btn').addEventListener('click', function (e) {
+ new confettiKit({
+ confettiCount: 40,
+ angle: 90,
+ startVelocity: 50,
+ elements: {
+ 'confetti': {
+ direction: 'down',
+ rotation: true,
+ },
+ 'star': {
+ count: 20,
+ direction: 'down',
+ rotation: true,
+ },
+ 'ribbon': {
+ count: 5,
+ direction: 'down',
+ rotation: true,
+ },
+ 'custom': [
+ {
+ count: 10,
+ width: 25,
+ content: svgSource,
+ contentType: 'svg',
+ direction: 'down',
+ rotation: true,
+ },
+ ]
+ },
+ x: e.clientX,
+ y: e.clientY
+ });
+ });
+
+ //multiple Custom
+ document.querySelector('#multiple-btn').addEventListener('click', function (e) {
+ new confettiKit({
+ confettiCount: 40,
+ angle: 90,
+ startVelocity: 50,
+ elements: {
+ 'confetti': {
+ direction: 'down',
+ rotation: true,
+ },
+ 'star': {
+ count: 0,
+ direction: 'down',
+ rotation: true,
+ },
+ 'ribbon': {
+ count: 0,
+ direction: 'down',
+ rotation: true,
+ },
+ 'custom': [
+ {
+ count: 10,
+ width: 25,
+ textSize:15,
+ content: 'Confetti',
+ contentType: 'text',
+ direction: 'down',
+ rotation: true,
+ },
+ {
+ count: 10,
+ width: 25,
+ content: svgSource,
+ contentType: 'svg',
+ direction: 'down',
+ rotation: true,
+ },
+ {
+ count: 10,
+ width: 25,
+ textSize:15,
+ content: '//bootstraptema.ru/snippets/effect/2018/confettikit/FlowerClipart.png',
+ contentType: 'image',
+ direction: 'down',
+ rotation: true,
+ },
+ ]
+ },
+ x: e.clientX,
+ y: e.clientY
+ });
+ });
+ </script>
+
+" />
+<div class="canvas">
+<style>
+body{background-color:#222}
+h1{
+ color: rgb(255, 255, 255);
+font-size: 500%;
+text-shadow: rgb(204, 204, 204) 0px 1px 0px, rgb(201, 201, 201) 0px 2px 0px, rgb(187, 187, 187) 0px 3px 0px, rgb(185, 185, 185) 0px 4px 0px, rgb(170, 170, 170) 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 6px 1px, rgba(0, 0, 0, 0.1) 0px 0px 5px, rgba(0, 0, 0, 0.3) 0px 1px 3px, rgba(0, 0, 0, 0.15) 0px 3px 5px, rgba(0, 0, 0, 0.2) 0px 5px 10px, rgba(0, 0, 0, 0.2) 0px 10px 10px, rgba(0, 0, 0, 0.1) 0px 20px 20px;
+}
+#canvaseffect {
+ position:absolute;
+ top:0; left:0;
+ opacity:.8;
+}
+</style>
+</div>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+
+
+<canvas id="canvaseffect"></canvas>
+
+<div class="container">
+<div class="row">
+<div class="col-md-8 col-md-offset-2">
+
+<h1 class="text-center">CANVAS EFFECT</h1>
+
+</div><!-- /.col-md-8 col-md-offset-2 -->
+</div><!-- /.row -->
+</div><!-- /.container -->
+
+<script>
+var w = canvaseffect.width = window.innerWidth,
+ h = canvaseffect.height = window.innerHeight,
+ ctx = canvaseffect.getContext('2d'),
+
+ total = w,
+ accelleration = .05,
+
+ size = w/total,
+ occupation = w/total,
+ repaintColor = 'rgba(0, 0, 0, .04)'
+ colors = [],
+ dots = [],
+ dotsVel = [];
+
+var portion = 360/total;
+for(var i = 0; i < total; ++i){
+ colors[i] = portion * i;
+
+ dots[i] = h;
+ dotsVel[i] = 10;
+}
+
+function anim(){
+ window.requestAnimationFrame(anim);
+
+ ctx.fillStyle = repaintColor;
+ ctx.fillRect(0, 0, w, h);
+
+ for(var i = 0; i < total; ++i){
+ var currentY = dots[i] - 1;
+ dots[i] += dotsVel[i] += accelleration;
+
+ ctx.fillStyle = 'hsl('+ colors[i] + ', 80%, 50%)';
+ ctx.fillRect(occupation * i, currentY, size, dotsVel[i] + 1);
+
+ if(dots[i] > h && Math.random() < .01){
+ dots[i] = dotsVel[i] = 0;
+ }
+ }
+}
+anim();
+</script>
+
+
+</body>
