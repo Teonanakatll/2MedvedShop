@@ -12,7 +12,7 @@
   <!--  Шрифт Roboto  -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,100;1,300&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
 
@@ -23,24 +23,49 @@
 </head>
 <body>
 
-
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2">
-        <h1 class="title">Наш магазин скоро откроется</h1>
-        <h1 class="title">Оставляйте Ваш имейл в форме ниже</h1>
-        <div>
-          <form action="" method="post">{% csrf_token %}
-            {{ form.as_p }}
-            <div>
-              <button type="submit" class="btn btn-sm btn-primary">Отправить</button>
-            </div>
-          </form>
+  <div class="general-container img-fluid">
+    <div class="container top-container">
+      <div class="row">
+        <div class="col-lg-12 pr-2">
+          <h1 class="title">Наш магазин скоро откроется</h1>
+          <h1 class="title">Оставляйте Ваш имейл в форме ниже</h1>
         </div>
       </div>
+
+      <form action="" method="post">{% csrf_token %}
+        <div class="row text-center g-3">
+          <span>{{ error }}</span>
+          <label class="col-sm-1 col-form-label col-form-label-sm">Имя:</label>
+
+          <div class="col-sm-4">
+            <!--  Тег <input> является одним из разносторонних элементов формы и позволяет создавать разные элементы
+             интерфейса и обеспечить взаимодействие с пользователем. Главным образом <input> предназначен для создания
+              текстовых полей, различных кнопок, переключателей и флажков. Хотя элемент <input> не требуется помещать
+              внутрь контейнера <form>, определяющего форму, но если введенные пользователем данные должны быть
+               отправлены на сервер, где их обрабатывает серверная программа, то указывать <form> обязательно. То же
+                самое обстоит и в случае обработки данных с помощью клиентских приложений, например, скриптов на языке
+                 JavaScript.
+
+            Основной атрибут тега <input>, определяющий вид элемента — type. Он позволяет задавать следующие элементы
+             формы: текстовое поле (text), поле с паролем (password), переключатель (radio), флажок (checkbox), скрытое
+              поле (hidden), кнопка (button), кнопка для отправки формы (submit), кнопка для очистки формы (reset),
+               поле для отправки файла (file) и кнопка с изображением (image). Для каждого элемента существует свой
+               список атрибутов, которые определяют его вид и характеристики. Кроме того, в HTML5 добавлено еще более
+                десятка новых элементов.          -->
+            <input type="text" name="{{ form.name }}">
+          </div>
+
+          <label class="col-sm-1 col-form-label col-form-label-sm">Email:</label>
+
+          <div class="col-sm-4">
+            <input type="text" name="{{ form.email }}">
+          </div>
+          <div class="col-sm-2"><button type="submit" class="btn btn-primary btn-orange">Отправить</button></div>
+        </div>
+      </form>
+
     </div>
   </div>
-
   <script src="{% static 'landing/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'landing/js/scripts.js' %}"></script>
 </body>
