@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import post_save
 
 from products.models import Product
 
@@ -37,10 +38,14 @@ class Order(models.Model):
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
 
+    def save(self, *args, **kwargs):
+        """ Переопределяем метод save() """
+        super(Order, self).save(*args, **kwargs)
+
 
 class ProductInOrder(models.Model):
     """ Модель с донными продукта находящегося в зказе. """
-    order = models.ForeignKey(Order, on_delete=models.PROTECT, blank=True, null=True, default=None)
+    order = models.ForeignKey(Order, on_delete=models.DO_NOTHING, blank=True, null=True, default=None)
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, blank=True, null=True, default=None)
     nmb = models.IntegerField(default=1)
     price_per_item = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -53,5 +58,34 @@ class ProductInOrder(models.Model):
         return self.product.name
 
     class Meta:
-        verbose_name = 'Товар'
-        verbose_name_plural = 'Товары'
+        verbose_name = 'Товар в заказе'
+        verbose_name_plural = 'Товары в заказе'
+
+    def save(self, *args, **kwargs):
+        """ Переопределяем метод save() """
+        price_per_item = self.product.price
+        self.price_per_item = price_per_item
+
+        self.total_price = self.nmb * price_per_item
+
+        super(ProductInOrder, self).save(*args, **kwargs)
+
+# Функция post_save(), служит для изменения (пересчёта) зночений полей связанной (первичной) модели,
+# при создании каждой связанной (вторичной) модели, используя зночения её полей.
+# Изменять с помощью post_save() можно только поля в другой модели, попытка сохранить в тойже модели
+# будет снова вызывать post_save() (зациклит).
+def product_in_order_post_save(sender, instance, created, **kwargs):
+    order = instance.order
+    # Считываем все товары в заказе
+    all_products_in_order = ProductInOrder.objects.filter(order=order, is_active=True)
+
+    order_total_price = 0
+    # Проходим циклом по списку товаров и высяитываем общую стоимость
+    for item in all_products_in_order:
+        order_total_price += item.total_price
+
+    instance.order.total_price = order_total_price
+    instance.order.save(force_update=True)
+
+
+post_save.connect(product_in_order_post_save, sender=ProductInOrder)
