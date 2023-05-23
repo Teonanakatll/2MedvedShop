@@ -6,6 +6,7 @@ class Product(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True, default=None)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     description = models.TextField(blank=True, null=True, default=None)
+    short_description = models.TextField(blank=True, null=True, default=None)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -22,6 +23,7 @@ class ProductImage(models.Model):
     """ Модель для хранения данных фотографии продукта. """
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, blank=True, null=True, default=None)
     image = models.ImageField(upload_to='products_images/')
+    is_main = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

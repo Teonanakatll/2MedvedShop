@@ -1,0 +1,39 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="section-top">
+    <div class="container">
+      <div class="row">
+        <img src="{% static 'landing/img/ind.jpg' %}" class="img-home d-flex img-fluid">
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="container">
+      <div class="row">
+        {% for product_image in products_images %}
+          <div class="col-lg-3 mb-4">
+            <div class="product-item">
+              <div>
+                <!--  функция url подставляет урл картинки в шаблон  -->
+                <img src="{{ product_image.image.url }}" class="img-product img-responsive" alt="">
+              </div>
+              <h5>{{ product_image.product.name }}</h5>
+              <!--  truncatechars_html - после вывода нужного количества символов закроет тег  -->
+              <p>{{ product_image.product.description|truncatechars_html:70 }}</p>
+              <div class="price">
+                {{ product_image.product.price }} RUB.
+              </div>
+              <div class="add-to-card-btn">
+                <button class="btn btn-sm btn-success">
+                  Добавить в корзину
+                </button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
