@@ -1,6 +1,11 @@
 from django.contrib import admin
 
-from products.models import Product, ProductImage
+from products.models import Product, ProductImage, ProductCategory
+
+
+class ProductCategoryAdmin(admin.ModelAdmin):
+    """ Отображение категории товара. """
+    list_display = [field.name for field in ProductCategory._meta.fields]
 
 
 class ProductImageInline(admin.TabularInline):
@@ -21,6 +26,6 @@ class ProductImageAdmin(admin.ModelAdmin):
     """ Отображение фотаграфии продукта в админ понели. """
     list_display = [field.name for field in ProductImage._meta.fields]
 
-
+admin.site.register(ProductCategory, ProductCategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage, ProductImageAdmin)
