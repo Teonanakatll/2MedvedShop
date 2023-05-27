@@ -11,7 +11,8 @@
             <img src="{{ image_item.image.url }}" class="img-fluid mt-4">
         {% endfor %}
       </div>
-      <div class="col-lg-6">
+
+      <div class="col-lg-6 mt-4">
         <h1 class="text-center">
           {{ product.name }}
         </h1>
@@ -48,6 +49,25 @@
             <h5>Наши контакты</h5>
           </div>
         </div>
+
+        <div>
+
+          <form id="form_buying_product">
+            <div class="input-group mb-3">
+              <input type="number" name="num" id="num" class="form-control">
+              <!--  Создаём на кнопке data-атрибуты для использвания в jquery  -->
+              <button type="submit" class="btn btn-success btn-bye" id="submit_btn"
+                      data-product_id="{{ product.id }}"
+                      data-product_name="{{ product.name }}"
+                      data-product_price="{{ product.price }}"
+              >
+                Купить
+              </button>
+            </div>
+          </form>
+
+        </div>
+
 
       </div>
     </div>
