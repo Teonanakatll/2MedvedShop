@@ -34,10 +34,45 @@ $(document).ready(function(){
         // добавить или изменить значение атрибута data у всех выбранных элементов
         //$('селектор').attr('data-*','значение');
 
+            // В славаре data будут данные которые мы будем использовать для добавления модели ProductInBasket
+            // и после удачного добавления записи в бд, для добавления выбранного товара и его кол-ва в корзину
+            var data = {};
+            data.product_id = product_id;
+            data.nmb = nmb;
+
+            // В переменную csrf_token добавляем токен (из формы), который нужен джанго чтобы отправить post-запрос
+            var csrf_token = $('#form_buying_product [name="csrfmiddlewaretoken"]').val();
+            // Добавляем токен в славарь data
+            data["csrfmiddlewaretoken"] = csrf_token;
+            // Адрес на который необходимо отпоавлять post-запрос
+            // url считываем с аттрибута action на форме
+            var url = form.attr("action");
+
+            console.log(data);
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,   // Переменная с донными
+                cache: true,
+                success: function(data) {  // При успешном ответе сервера вызывается функция
+                    console.log("OK");
+                    // Выводим в консоль данные переменной products_total_nmb, переданные функцией представления adding_basket
+                    console.log(data.products_total_nmb);
+                    // Если есть, отрисовываем в корзине количество позиций товаров, текстом в span
+                    if (data.products_total_nmb) {
+                        $('#basket_total_nmb').text("("+data.products_total_nmb+")");
+                    }
+
+                },
+                error: function() {
+                    console.log("error")   // При ошибке
+                }
+            })
+
         // Обращаемся к елементу на уровень ниже (ul)
         // И с помощю функции append() добавляем в него элемент
         $('.basket-items ul').append('<li>'+product_name+', '+ nmb + 'шт. ' + 'по ' + product_price + 'руб.' +
-
         // Чтоб появился курсор добавляем href=""
         // Добавляем 'x' и дата-аттрибут data-product_id для возм. удаления
         '<a href="" class="delete-item">x</a>'+

@@ -51,8 +51,8 @@
         </div>
 
         <div>
-
-          <form id="form_buying_product">
+          <!--  Атрибут action необходим для считывания url-адреса аджаксом (создаём вьюху)  -->
+          <form id="form_buying_product" action="{% url 'basket_adding' %}">{% csrf_token %}
             <div class="input-group mb-3">
               <input type="number" name="num" id="num" class="form-control">
               <!--  Создаём на кнопке data-атрибуты для использвания в jquery  -->
