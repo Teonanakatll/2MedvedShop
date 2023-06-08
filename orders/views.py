@@ -21,7 +21,33 @@ def basket_adding(request):
     product_id = data.get("product_id")
     nmb = data.get("nmb")
 
-    new_product = ProductInBasket.objects.create(session_key=session_key, product_id=product_id, nmb=nmb)
-    products_total_nmb = ProductInBasket.objects.filter(session_key=session_key, is_active=True).count()
+    # Возвращает обьект (ищет по совпадающим полям), или создаёт со всеми указанными полями
+    # Метод возвращает добавленный обьект и буллевое значение (created) True если дабавление прошло успешно
+    # Если обьектов больше одного вернет MultipleObjectsReturned
+    # По полю nmb - ненужно искать совпадения, ном его нужно обновить, поэтому записываем его в "defaults"
+    new_product, created = ProductInBasket.objects.get_or_create(session_key=session_key, product_id=product_id, defaults={"nmb": nmb})
+
+    # Если запись уже существует обновляем количество товара
+    if not created:
+        print("not created")
+        new_product.nmb += int(nmb)
+        new_product.save(force_update=True)
+
+    products_in_basket = ProductInBasket.objects.filter(session_key=session_key, is_active=True)
+    products_total_nmb = products_in_basket.count()
     return_dict["products_total_nmb"] = products_total_nmb
+
+    # Создаём список для перерисовки товаров (через Ajax) в корзине,
+    # после добавления нового или изменения количества товара
+    return_dict["products"] = list()
+
+    for item in products_in_basket:
+        product_dict = dict()                    # Создаём словарь для кождого товара
+        product_dict["id"] = item.id             # id - для удаления товара через Ajax
+        product_dict["name"] = item.product.name
+        product_dict["price_per_item"] = item.price_per_item
+        product_dict["nmb"] = item.nmb
+        return_dict["products"].append(product_dict)
+
+
     return JsonResponse(return_dict)

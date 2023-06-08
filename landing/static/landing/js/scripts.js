@@ -62,6 +62,19 @@ $(document).ready(function(){
                     // Если есть, отрисовываем в корзине количество позиций товаров, текстом в span
                     if (data.products_total_nmb) {
                         $('#basket_total_nmb').text("("+data.products_total_nmb+")");
+                        // Выводим данные JsonResponse переданные с бэкэнда (views, basket_adding)
+                        console.log(data.products);
+                        // Очищаем предыдущие записи (ul) в корзине перед перерисовкой
+                        $('.basket-items ul').html("");
+                        $.each(data.products, function(k, v) {
+                            // Обращаемся к елементу на уровень ниже (ul)
+                            // И с помощю функции append() добавляем в него элемент
+                            $('.basket-items ul').append('<li>'+v.name+', '+ v.nmb + 'шт. ' + 'по ' + v.price_per_item + 'руб.' +
+                            // Чтоб появился курсор добавляем href=""
+                            // Добавляем 'x' и дата-аттрибут data-product_id для возм. удаления
+                            //'<a href="" class="delete-item">x</a>'+
+                            '</li>');
+                        })
                     }
 
                 },
@@ -69,14 +82,6 @@ $(document).ready(function(){
                     console.log("error")   // При ошибке
                 }
             })
-
-        // Обращаемся к елементу на уровень ниже (ul)
-        // И с помощю функции append() добавляем в него элемент
-        $('.basket-items ul').append('<li>'+product_name+', '+ nmb + 'шт. ' + 'по ' + product_price + 'руб.' +
-        // Чтоб появился курсор добавляем href=""
-        // Добавляем 'x' и дата-аттрибут data-product_id для возм. удаления
-        '<a href="" class="delete-item">x</a>'+
-        '</li>');
     });
 
     // Написоние функции (дублирование кода)

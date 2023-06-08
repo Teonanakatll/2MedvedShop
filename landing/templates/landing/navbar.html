@@ -41,16 +41,22 @@
     <ul class="nav justify-content-right">
       <li class="nav-item navbar-nav">
         <div class="basket-container">
-          <a href="#" class="nav-link active" aria-current="page">Корзина <span id="basket_total_nmb"></span></a>
+          <!--  products_total_nmb берём из context_processors  -->
+          <a href="#" class="nav-link active" aria-current="page">Корзина <span id="basket_total_nmb">
+            {% if products_total_nmb %}
+              ({{ products_total_nmb }})
+            {% else %}
+              (0)
+            {% endif %}
+          </span></a>
 
           <div class="basket-items mt-2 visually-hidden">
             <ul class="">
-              <li>
-                dsfsf
-              </li>
-              <li>
-                dsfsf
-              </li>
+              <!--  Из context_processors выводим кверисет взятый по ключу сессии из бд  -->
+              {% for product_in_basket in products_in_basket %}
+                <li>{{ product_in_basket.product.name }} {{ product_in_basket.nmb }} шт. по
+                     {{ product_in_basket.price_per_item }} руб.</li>
+              {% endfor %}
             </ul>
           </div>
 
