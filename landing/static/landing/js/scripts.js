@@ -7,6 +7,69 @@ $(document).ready(function(){
     // Вывадим в консоль
     console.log(form);
 
+// ФУНКЦИЯ РАБОТАЕТ С БД ЧЕРЕЗ basket_adding, ПРИНИМАЕТ КВЕРИСЕТ ПО КЛЮЧУ СЕССИИ ДЛЯ ОТРИСОВКИ В КОРЗИНЕ,
+// ПЕРЕДАЁТ ДАННЫЕ В basket_adding ДЛЯ ДОБАВЛЕНИЯ ЗАПИСИ В БД ProductInBasket,
+// УДАЛЯЕТ ЗАПИСЬ ИЗ БД. (ВСЁ ЭТО БЕЗ ПЕРЕЗАГРУЗКИ СТРАНИЦЫ)
+
+    function basketUpdating(product_id, nmb, is_delete){
+        // добавить или изменить значение атрибута data у всех выбранных элементов
+        //$('селектор').attr('data-*','значение');
+
+        // В славаре data будут данные которые мы будем использовать для добавления модели ProductInBasket
+        // и после удачного добавления записи в бд, для добавления выбранного товара и его кол-ва в корзину
+        var data = {};
+        data.product_id = product_id;
+        data.nmb = nmb;
+
+        // В переменную csrf_token добавляем токен (из формы), который нужен джанго чтобы отправить post-запрос
+        var csrf_token = $('#form_buying_product [name="csrfmiddlewaretoken"]').val();
+        // Добавляем токен в славарь data
+        data["csrfmiddlewaretoken"] = csrf_token;
+
+        if (is_delete){
+            data["is_delete"] = true;
+        }
+
+        // Адрес на который необходимо отпоавлять post-запрос
+        // url считываем с аттрибута action на форме
+        var url = form.attr("action");
+
+        console.log(data);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,   // Переменная с донными
+            cache: true,
+            success: function(data) {  // При успешном ответе сервера вызывается функция
+                console.log("OK");
+                // Выводим в консоль данные переменной products_total_nmb, переданные функцией представления adding_basket
+                console.log(data.products_total_nmb);
+                // Если есть, отрисовываем в корзине количество позиций товаров, текстом в span
+                if (data.products_total_nmb || data.products_total_nmb == 0) {
+                    $('#basket_total_nmb').text("("+data.products_total_nmb+")");
+                    // Выводим данные JsonResponse переданные с бэкэнда (views, basket_adding)
+                    console.log(data.products);
+                    // Очищаем предыдущие записи (ul) в корзине перед перерисовкой
+                    $('.basket-items ul').html("");
+                    $.each(data.products, function(k, v) {
+                        // Обращаемся к елементу на уровень ниже (ul)
+                        // И с помощю функции append() добавляем в него элемент
+                        $('.basket-items ul').append('<li>'+v.name+', '+ v.nmb + 'шт. ' + 'по ' + v.price_per_item + 'руб.' +
+                        // Чтоб появился курсор добавляем href=""
+                        // Добавляем 'x' и дата-аттрибут data-product_id для возм. удаления
+                        '<a href="" class="delete-item" data-product_id="'+v.id+'">x</a>'+
+                        '</li>');
+                    })
+                }
+
+            },
+            error: function() {
+                console.log("error")   // При ошибке
+            }
+        })
+    }
+
     //      ФУНКЦИЯ ОТРАБАТЫВАЕТ ПРИ НАЖАТИИ НА КНОПКУ 'Купить' НА ТОВАРЕ В product.html
 
     // Присоединяем к форме событие, при событии передаём функции параметр е (event) - cтандартвый
@@ -31,57 +94,8 @@ $(document).ready(function(){
         console.log(product_name);
         console.log(product_price);
 
-        // добавить или изменить значение атрибута data у всех выбранных элементов
-        //$('селектор').attr('data-*','значение');
+        basketUpdating(product_id, nmb, is_delete=false)
 
-            // В славаре data будут данные которые мы будем использовать для добавления модели ProductInBasket
-            // и после удачного добавления записи в бд, для добавления выбранного товара и его кол-ва в корзину
-            var data = {};
-            data.product_id = product_id;
-            data.nmb = nmb;
-
-            // В переменную csrf_token добавляем токен (из формы), который нужен джанго чтобы отправить post-запрос
-            var csrf_token = $('#form_buying_product [name="csrfmiddlewaretoken"]').val();
-            // Добавляем токен в славарь data
-            data["csrfmiddlewaretoken"] = csrf_token;
-            // Адрес на который необходимо отпоавлять post-запрос
-            // url считываем с аттрибута action на форме
-            var url = form.attr("action");
-
-            console.log(data);
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: data,   // Переменная с донными
-                cache: true,
-                success: function(data) {  // При успешном ответе сервера вызывается функция
-                    console.log("OK");
-                    // Выводим в консоль данные переменной products_total_nmb, переданные функцией представления adding_basket
-                    console.log(data.products_total_nmb);
-                    // Если есть, отрисовываем в корзине количество позиций товаров, текстом в span
-                    if (data.products_total_nmb) {
-                        $('#basket_total_nmb').text("("+data.products_total_nmb+")");
-                        // Выводим данные JsonResponse переданные с бэкэнда (views, basket_adding)
-                        console.log(data.products);
-                        // Очищаем предыдущие записи (ul) в корзине перед перерисовкой
-                        $('.basket-items ul').html("");
-                        $.each(data.products, function(k, v) {
-                            // Обращаемся к елементу на уровень ниже (ul)
-                            // И с помощю функции append() добавляем в него элемент
-                            $('.basket-items ul').append('<li>'+v.name+', '+ v.nmb + 'шт. ' + 'по ' + v.price_per_item + 'руб.' +
-                            // Чтоб появился курсор добавляем href=""
-                            // Добавляем 'x' и дата-аттрибут data-product_id для возм. удаления
-                            //'<a href="" class="delete-item">x</a>'+
-                            '</li>');
-                        })
-                    }
-
-                },
-                error: function() {
-                    console.log("error")   // При ошибке
-                }
-            })
     });
 
     // Написоние функции (дублирование кода)
@@ -112,8 +126,12 @@ $(document).ready(function(){
     // так как этот элемент создан после загрузки страницы и jquery не знает о его существовании
     $(document).on('click', '.delete-item', function(e){
         e.preventDefault();
-        // Обращаемся к этому же елементу через (this), и выбираем ближайший к нему элемент li
-        $(this).closest('li').remove();
+        // product_id будем считывать с дата атрибута кнопки
+        product_id = $(this).data("product_id");
+        nmb = 0;
+        basketUpdating(product_id, nmb, is_delete=true)
+//        // Обращаемся к этому же елементу через (this), и выбираем ближайший к нему элемент li
+//        $(this).closest('li').remove();
     })
 
 });

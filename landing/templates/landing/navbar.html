@@ -55,7 +55,10 @@
               <!--  Из context_processors выводим кверисет взятый по ключу сессии из бд  -->
               {% for product_in_basket in products_in_basket %}
                 <li>{{ product_in_basket.product.name }} {{ product_in_basket.nmb }} шт. по
-                     {{ product_in_basket.price_per_item }} руб.</li>
+                    {{ product_in_basket.price_per_item }} руб.
+                    <!--  Добавляем дата атрибут с id товара для возможности удаления  -->
+                    <a href="" class="delete-item" data-product_id="{{ product_in_basket.id }}"> x</a>
+                </li>
               {% endfor %}
             </ul>
           </div>
