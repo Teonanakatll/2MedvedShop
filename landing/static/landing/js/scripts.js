@@ -132,6 +132,40 @@ $(document).ready(function(){
         basketUpdating(product_id, nmb, is_delete=true)
 //        // Обращаемся к этому же елементу через (this), и выбираем ближайший к нему элемент li
 //        $(this).closest('li').remove();
+    });
+
+//           ФУНКЦИЯ ПРОХОДИТ ПО ОБЩЕЙ ЦЕНЕ ПОЗИЦИЙ ТОВАРОВ В КОРЗИНЕ И ПЕРЕСЧИТЫВАЕТ ОБЩУЮ СТОИМОСТЬ КОРЗИНЫ
+    function calculatingBasketAmount(){
+        var total_order_amount = 0;
+        // . - для считывания данных с class.
+        $('.total-product-in-basket-amount').each(function(){
+            console.log($(this).text());
+            // Считываем данные как текст, переводим в float и суммируем
+            total_order_amount += parseFloat($(this).text());
+        });
+        console.log(total_order_amount);
+        // Результат выводим по id на страницу, toFixed(2) переводит число в str обрезая 2 зн. после точки
+        $('#total_order_amount').text(total_order_amount.toFixed(2));
+    };
+
+//  ФУНКЦИЯ ОТСЛЕЖИВАЕТ ИЗМЕНЕНИЕ КОЛИЧЕСТВА ТОВАРА, РАСЧИТЫВАЕТ И ВЫВОДИТ ОБЩУЮ СТОИМОСТЬ КОРЗИНЫ
+    $(document).on('change', ".product-in-basket-nmb", function(){
+        // Считываем текущее кол-во товара c input-a
+        var current_nmb = $(this).val();
+        // Считываем значение с ближайшей ячейки tr (т.е. эту-же, в которой меняем кол-во)
+        var current_tr = $(this).closest("tr");
+        // Считываем стоимость товара cо span class="product-price", переводим в float
+        var current_price = parseFloat(current_tr.find('.product-price').text());
+        // Находим общую стоимость позиции товара, переводим в float
+        var total_amount = parseFloat(current_nmb*current_price).toFixed(2);
+        // Находим текущий span class="total_product_in_basket_amount" и вписываем значение
+        current_tr.find('.total-product-in-basket-amount').text(total_amount);
+        // Вызываем функцию calculatingBasketAmount() для подсчёта общей стоимости корзины
+        calculatingBasketAmount();
+
     })
+
+    // При загрузке страницы подсчитываем общую стоимость корзины
+    calculatingBasketAmount();
 
 });

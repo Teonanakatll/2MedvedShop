@@ -1,0 +1,65 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h3 class="text-center">Товары в корзине</h3>
+        <h5 class="text-center">Общая стоимость: {{ request.session.basket.total_amount }} руб.</h5>
+          {{ request.session.basket.products }}
+
+        <form class="table" action="">
+          <table>
+            <thead>
+              <tr>
+                <th>Название товара</th>
+                <th>Количество</th>
+                <th>Цена за единицу</th>
+                <th>Общая цена</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for product_in_basket in products_in_basket %}
+                <tr>
+                  <td>
+                    {{ product_in_basket.product.name }}
+                  </td>
+                  <td>
+                    <!--  Через класс product_in_basket_nmb считываем данные аджаксом для пересчёта и вывода
+                          total_price каждой позиции товара при изменении количества  -->
+                    <input type="number" class="product-in-basket-nmb" value="{{ product_in_basket.nmb }}">
+                  </td>
+                  <td>
+                    <span class="product-price">
+                      {{ product_in_basket.price_per_item }}
+                    </span>
+                  </td>
+                  <td>
+                    <!--  class - для считывания через цикл ajax-ом общей стоимости позиций товара.  -->
+                    <span class="total-product-in-basket-amount">
+                      {{ product_in_basket.total_price }}
+                    </span>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        <div class="d-flex justify-content-end">
+          <!--  Выводим абщую сумму товара из ajax  -->
+          <b>Сумма заказа:  </b> <span id="total_order_amount">  </span>
+        </div>
+
+          <hr>
+
+        <div class="d-flex justify-content-end mt-3">
+          <button type="submit" class="btn btn-primary btn-lg">Заказать</button>
+        </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
