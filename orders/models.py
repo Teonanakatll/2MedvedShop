@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 
@@ -21,11 +22,12 @@ class Status(models.Model):
 
 class Order(models.Model):
     """ Модель с данными заказа. """
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, blank=True, null=True, default=None)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # total price for all products in order
     customer_name = models.CharField(max_length=128, blank=True, null=True, default=None)
     customer_email = models.EmailField(blank=True, null=True, default=None)
     customer_phone = models.CharField(max_length=64, blank=True, null=True, default=None)
-    customer_addres = models.CharField(max_length=128, blank=True, null=True, default=None)
+    customer_address = models.CharField(max_length=128, blank=True, null=True, default=None)
     comments = models.TextField(blank=True, null=True, default=None)
     status = models.ForeignKey(Status, on_delete=models.DO_NOTHING)
     created = models.DateTimeField(auto_now_add=True)
@@ -66,7 +68,7 @@ class ProductInOrder(models.Model):
         price_per_item = self.product.price
         self.price_per_item = price_per_item
 
-        self.total_price = self.nmb * price_per_item
+        self.total_price = int(self.nmb) * price_per_item
 
         super(ProductInOrder, self).save(*args, **kwargs)
 

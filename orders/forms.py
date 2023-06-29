@@ -1,0 +1,11 @@
+from django import forms
+
+
+class CheckoutContactForm(forms.Form):
+    """ Форма не привязанная к модели, для передачи на сервер данных клиента
+        при добавлении нового заказа. """
+    # Атрибут required добавляется обязательным полям формы. Если поле с таким атрибутом не заполнено,
+    # то при отправке формы браузер покажет предупреждение и отменит отправку.
+    name = forms.CharField(required=True)
+    phone = forms.CharField(required=True)
+    email = forms.EmailField(required=True)

@@ -139,9 +139,9 @@ $(document).ready(function(){
         var total_order_amount = 0;
         // . - для считывания данных с class.
         $('.total-product-in-basket-amount').each(function(){
-            console.log($(this).text());
+//            console.log($(this).text());
             // Считываем данные как текст, переводим в float и суммируем
-            total_order_amount += parseFloat($(this).text());
+            total_order_amount = total_order_amount + parseFloat($(this).text());
         });
         console.log(total_order_amount);
         // Результат выводим по id на страницу, toFixed(2) переводит число в str обрезая 2 зн. после точки
@@ -152,12 +152,15 @@ $(document).ready(function(){
     $(document).on('change', ".product-in-basket-nmb", function(){
         // Считываем текущее кол-во товара c input-a
         var current_nmb = $(this).val();
+        console.log(current_nmb)
         // Считываем значение с ближайшей ячейки tr (т.е. эту-же, в которой меняем кол-во)
-        var current_tr = $(this).closest("tr");
+        var current_tr = $(this).closest('tr');
         // Считываем стоимость товара cо span class="product-price", переводим в float
-        var current_price = parseFloat(current_tr.find('.product-price').text());
+        var current_price = parseFloat(current_tr.find('.product-price').text()).toFixed(2);
+        console.log(current_price);
         // Находим общую стоимость позиции товара, переводим в float
         var total_amount = parseFloat(current_nmb*current_price).toFixed(2);
+        console.log(total_amount);
         // Находим текущий span class="total_product_in_basket_amount" и вписываем значение
         current_tr.find('.total-product-in-basket-amount').text(total_amount);
         // Вызываем функцию calculatingBasketAmount() для подсчёта общей стоимости корзины

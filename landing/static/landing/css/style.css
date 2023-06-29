@@ -80,6 +80,10 @@ html, body{
     border-radius: 12px;
 }
 
+.form-errors {
+    color: red;
+}
+
 .wrapper-content {
     overflow: auto;
     padding-bottom: 300px; /* must be same height as the footer */

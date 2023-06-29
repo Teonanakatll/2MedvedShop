@@ -4,61 +4,104 @@
 {% block content %}
   <div class="container">
     <div class="row">
-      <div class="col-lg-12">
-        <h3 class="text-center">Товары в корзине</h3>
-        <h5 class="text-center">Общая стоимость: {{ request.session.basket.total_amount }} руб.</h5>
-          {{ request.session.basket.products }}
+      {% if products_in_basket %}
+        <div class="col-lg-12">
+          <h3 class="text-center">Товары в корзине</h3>
+          <h5 class="text-center">Общая стоимость: {{ request.session.basket.total_amount }} руб.</h5>
+            {{ request.session.basket.products }}
 
-        <form class="table" action="">
-          <table>
-            <thead>
-              <tr>
-                <th>Название товара</th>
-                <th>Количество</th>
-                <th>Цена за единицу</th>
-                <th>Общая цена</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for product_in_basket in products_in_basket %}
+          <form class="form-horizontal" method="post">{% csrf_token %}
+
+            <span class="form-errors">{{ form.non_field_errors }}</span>
+
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label>Имя: </label>
+                    <!--  name - берем из формы переданной из вьюхи  -->
+                    <!--  value - выводим из пост-запроса введённое имя  -->
+                  <input type="text" name="{{ form.name.html_name }}" class="form-control"
+                    value="{{ request.POST.name }}"
+                  >
+                  <span class="form-errors">{{ form.name.errors }}</span>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label>Телефон: </label>
+                    <!--  name - устанавливаем как название поля формы  -->
+                    <!--  value - значение полученное из post-запроса  -->
+                  <input type="text" name="{{ form.phone.html_name}}" class="form-control"
+                    value="{{ request.POST.phone }}"
+                  >
+                  <span class="form-errors">{{ form.phone.errors }}</span>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label>Имейл: </label>
+                  <input type="text" name="{{ form.email.html_name }}" class="form-control"
+                    value="{{ request.POST.email }}"
+                  >
+                  <span class="form-errors">{{ form.email.errors }}</span>
+                </div>
+              </div>
+            </div>
+            <table class="table">
+              <thead>
                 <tr>
-                  <td>
-                    {{ product_in_basket.product.name }}
-                  </td>
-                  <td>
-                    <!--  Через класс product_in_basket_nmb считываем данные аджаксом для пересчёта и вывода
-                          total_price каждой позиции товара при изменении количества  -->
-                    <input type="number" class="product-in-basket-nmb" value="{{ product_in_basket.nmb }}">
-                  </td>
-                  <td>
-                    <span class="product-price">
-                      {{ product_in_basket.price_per_item }}
-                    </span>
-                  </td>
-                  <td>
-                    <!--  class - для считывания через цикл ajax-ом общей стоимости позиций товара.  -->
-                    <span class="total-product-in-basket-amount">
-                      {{ product_in_basket.total_price }}
-                    </span>
-                  </td>
+                  <th>Название товара</th>
+                  <th>Количество</th>
+                  <th>Цена за единицу</th>
+                  <th>Общая цена</th>
                 </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {% for product_in_basket in products_in_basket %}
+                  <tr>
+                    <td>
+                      {{ product_in_basket.product.name }}
+                    </td>
+                    <td>
+                      <!--  Через класс product-in-basket-nmb считываем данные аджаксом для пересчёта и вывода
+                            total_price каждой позиции товара при изменении количества  -->
+                      <!--  name - устанавливаем как id прадукта
+                            value - переданное пост-запросом количество продукта  -->
+                      <input type="number" class="product-in-basket-nmb" value="{{ product_in_basket.nmb }}"
+                                  name="product_in_basket_{{ product_in_basket.id }}">
+                    </td>
+                    <td>
+                      <span class="product-price">
+                        {{ product_in_basket.price_per_item }}
+                      </span>
+                    </td>
+                    <td>
+                      <!--  class - для считывания через цикл ajax-ом общей стоимости позиций товара.  -->
+                      <span class="total-product-in-basket-amount">
+                        {{ product_in_basket.total_price }}
+                      </span>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
 
-        <div class="d-flex justify-content-end">
-          <!--  Выводим абщую сумму товара из ajax  -->
-          <b>Сумма заказа:  </b> <span id="total_order_amount">  </span>
+          <div class="d-flex justify-content-end">
+            <!--  Выводим абщую сумму товара из ajax  -->
+            <b>Сумма заказа:  </b> <span id="total_order_amount">  </span>
+          </div>
+
+            <hr>
+
+          <div class="d-flex justify-content-end mt-3">
+            <button type="submit" class="btn btn-primary btn-lg">Заказать</button>
+          </div>
+
+          </form>
         </div>
-
-          <hr>
-
-        <div class="d-flex justify-content-end mt-3">
-          <button type="submit" class="btn btn-primary btn-lg">Заказать</button>
-        </div>
-
-        </form>
-      </div>
+      {% else %}
+        <h3 class="text-center mt-5">В вашей корзине нет товаров.</h3>
+      {% endif %}
 
     </div>
   </div>
