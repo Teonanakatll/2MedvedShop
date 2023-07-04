@@ -2,7 +2,24 @@
 https://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/
 
 
+# Ссылка по настройкe ssh
+https://freehost.com.ua/faq/articles/kak-nastroit-ssh-s-pomoschju--ssh-config/
+# 1. При создании дополнительных ssh-ключей прописываем путь сохранения c/Users/Славик/.ssh/id_new
+# 2. Создаём файл config - nano ~/.ssh/config
+# 3. В файле прописываем
+Host old
+        HostName 31.129.96.144
+        Port 22
+        User root
+        IdentityFile ~/.ssh/id_rsa
+        IdentitiesOnly yes
 
+Host new
+        HostName 62.113.111.213
+        User root
+        IdentityFile ~/.ssh/id_new
+        IdentitiesOnly yes
+# 4. Ввести на сайте публичный ключ из id_rsa/id_new Publisher
 
 #                       Файл регистрации ssh ключа
 env=~/.ssh/agent.env
@@ -31,7 +48,8 @@ unset env
 
 
 #                           при копировании дб решает ошибку
-python -Xutf8 manage.py dumpdata --indent=3 > initial_data.json
+python -Xutf8 manage.py dumpdata --exclude auth.permission --exclude contenttypes > initial_data.json
+
 
 
 
