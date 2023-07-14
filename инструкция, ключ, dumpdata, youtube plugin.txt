@@ -1,0 +1,194 @@
+#                            ссылка по деплою на сервер Ubuntu
+https://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/
+
+
+# Ссылка по настройкe ssh
+https://ru.stackoverflow.com/questions/1380524/ssh-%D0%B8-publickey-%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BD%D0%B5%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%BA%D0%B8%D1%85-%D0%BD%D0%B0%D0%B1%D0%BE%D1%80%D0%BE%D0%B2-%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%B9
+https://freehost.com.ua/faq/articles/kak-nastroit-ssh-s-pomoschju--ssh-config/
+# 1. При создании дополнительных ssh-ключей прописываем путь сохранения c/Users/Славик/.ssh/id_new
+# 2. Создаём файл config - nano ~/.ssh/config
+# 3. В файле прописываем
+Host old
+        HostName 31.129.96.144
+        Port 22
+        User root
+        IdentityFile ~/.ssh/id_rsa
+        IdentitiesOnly yes
+
+Host new
+        HostName 62.113.111.213
+        User root
+        IdentityFile ~/.ssh/id_new
+        IdentitiesOnly yes
+# 4. Ввести на сайте публичный ключ из id_rsa/id_new Publisher
+
+#                       Файл регистрации ssh ключа
+env=~/.ssh/agent.env
+
+agent_load_env () { test -f "$env" && . "$env" >| /dev/null ; }
+
+agent_start () {
+    (umask 077; ssh-agent >| "$env")
+    . "$env" >| /dev/null ; }
+
+agent_load_env
+
+# agent_run_state: 0=agent running w/ key; 1=agent w/o key; 2=agent not running
+agent_run_state=$(ssh-add -l >| /dev/null 2>&1; echo $?)
+
+if [ ! "$SSH_AUTH_SOCK" ] || [ $agent_run_state = 2 ]; then
+    agent_start
+    ssh-add
+elif [ "$SSH_AUTH_SOCK" ] && [ $agent_run_state = 1 ]; then
+    ssh-add
+fi
+
+unset env
+
+
+
+
+#                           при копировании дб решает ошибку
+python -Xutf8 manage.py dumpdata --exclude auth.permission --exclude contenttypes --indent=3 > initial_data.json
+
+
+
+
+
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = []
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+
+
+
+#                                gunicorn_start
+
+#!/bin/bash
+
+NAME="django_shop_app"                                  # Name of the application
+DJANGODIR=/webapps/django_shop2/medved            # Django project directory
+SOCKFILE=/webapps/django_shop2/run/gunicorn.sock  # we will communicte using this unix socket
+USER=django_shop2                                        # the user to run as
+GROUP=webapps                                     # the group to run as
+NUM_WORKERS=3                                     # how many worker processes should Gunicorn spawn
+DJANGO_SETTINGS_MODULE=medved.settings             # which settings file should Django use
+DJANGO_WSGI_MODULE=medved.wsgi                     # WSGI module name
+
+echo "Starting $NAME as `whoami`"
+
+# Activate the virtual environment
+cd $DJANGODIR
+source ../bin/activate
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+
+# Create the run directory if it doesn't exist
+RUNDIR=$(dirname $SOCKFILE)
+test -d $RUNDIR || mkdir -p $RUNDIR
+
+# Start your Django Unicorn
+# Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
+exec ../bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
+  --name $NAME \
+  --workers $NUM_WORKERS \
+  --user=$USER --group=$GROUP \
+  --bind=unix:$SOCKFILE \
+  --log-level=debug \
+  --log-file=-
+
+
+
+#                              django_shop2.conf (Supervisor)
+
+[program:django_shop2]
+command = /webapps/django_shop2/bin/gunicorn_start                    ; Command to start app
+user = django_shop2                                                          ; User to run as
+stdout_logfile = /webapps/django_shop2/logs/gunicorn_supervisor.log   ; Where to write log messages
+redirect_stderr = true                                                ; Save stderr in the same log
+environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8                       ; Set UTF-8 as default encoding
+
+
+
+
+#                             django_shop2.nginxconf , копировать в файл /etc/nginx/sites-available/django_shop2
+
+upstream django_shop2_server {
+  # fail_timeout=0 means we always retry an upstream even if it failed
+  # to return a good HTTP response (in case the Unicorn master nukes a
+  # single worker for timing out).
+
+  server unix:/webapps/django_shop2/run/gunicorn.sock fail_timeout=0;
+}
+
+server {
+
+    listen   80;
+    server_name example.com;
+
+    client_max_body_size 4G;
+
+    access_log /webapps/django_shop2/logs/nginx-access.log;
+    error_log /webapps/django_shop2/logs/nginx-error.log;
+
+    location /static/ {
+        alias   /webapps/django_shop2/medved/static/;
+    }
+
+    location /media/ {
+        alias   /webapps/django_shop2/medved/media/;
+    }
+
+    location / {
+        # an HTTP header important enough to have its own Wikipedia entry:
+        #   http://en.wikipedia.org/wiki/X-Forwarded-For
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # enable this if and only if you use HTTPS, this helps Rack
+        # set the proper protocol for doing redirects:
+        # proxy_set_header X-Forwarded-Proto https;
+
+        # pass the Host: header from the client right along so redirects
+        # can be set properly within the Rack application
+        proxy_set_header Host $http_host;
+
+        # we don't want nginx trying to do something clever with
+        # redirects, we set the Host: header above already.
+        proxy_redirect off;
+
+        # set "proxy_buffering off" *only* for Rainbows! when doing
+        # Comet/long-poll stuff.  It's also safe to set if you're
+        # using only serving fast clients with Unicorn + nginx.
+        # Otherwise you _want_ nginx to buffer responses to slow
+        # clients, really.
+        # proxy_buffering off;
+
+        # Try to serve static files from nginx, no point in making an
+        # *application* server like Unicorn/Rainbows! serve static files.
+        if (!-f $request_filename) {
+            proxy_pass http://django_shop2_server;
+            break;
+        }
+    }
+
+    # Error pages
+    error_page 500 502 503 504 /500.html;
+    location = /500.html {
+        root /webapps/django_shop2/static/;
+    }
+}
+
+#                                CKEDITOR YOUTUBE PLUGIN
+# мануал https://www.youtube.com/watch?v=fMZBTCRGMS8
+
+# В плагин youtube https://ckeditor.com/cke4/addon/youtube
+
+# 1. В ckeditor/ckeditor/config.js прописать config.extraPlugins = 'youtube';
+
+# 2. На локальном сервере использовать плагин можно только из попки static/, а для этого необходимо прописать настройки
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [STATIC_DIR]

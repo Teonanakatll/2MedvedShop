@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-w%ki77$l89j+)d*2qh9&h28)^qby5vsfgh2@o_7r^trt=)jtug'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -41,6 +41,11 @@ INSTALLED_APPS = [
     'landing.apps.LandingConfig',
     'orders.apps.OrdersConfig',
     'products.apps.ProductsConfig',
+    'management_area.apps.ManagementAreaConfig',
+
+    'ckeditor_uploader',
+    'ckeditor',
+    'import_export'
 ]
 
 MIDDLEWARE = [
@@ -58,7 +63,7 @@ ROOT_URLCONF = 'medved2.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +73,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 'orders.context_processors.getting_basket_info',
+                'management_area.context_processors.getting_privacy_policy'
             ],
         },
     },
@@ -132,6 +138,10 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = []
 
+# Для использования youtube plugin на локальном сервере необходимо прописать настройки (он берётся только из static/)
+# STATIC_DIR = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [STATIC_DIR]
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
@@ -140,3 +150,111 @@ if DEBUG == False:
         from .settings_prod import *
     except:
         pass
+
+
+# Путь для сохранения файлов через ckeditor_uploader
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+# группировки загруженных файлов по годам/месяцам/дням.
+CKEDITOR_RESTRICT_BY_DATE = False
+
+# Установить пользовательское хранилище файлов для загрузчика CKEditor
+# CKEDITOR_STORAGE_BACKEND =
+
+# Вы можете установить CKEDITOR_IMAGE_BACKENDодин из поддерживаемых бэкендов, чтобы включить миниатюры в
+# галерее ckeditor. По умолчанию миниатюры не создаются, а для предварительного просмотра используются
+# полноразмерные изображения. Поддерживаемые серверные части:
+
+# С помощью PillowBackendбэкэнда вы можете изменить размер миниатюры с помощью CKEDITOR_THUMBNAIL_SIZE
+# настройки (ранее THUMBNAIL_SIZE). Значение по умолчанию: (75, 75)
+# CKEDITOR_THUMBNAIL_SIZE = (100, 100)
+
+CKEDITOR_CONFIGS = {
+    'one': {
+        'toolbar': 'Basic',
+    },
+
+    'two': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': 300,
+    },
+
+    'three': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source']
+        ]
+    },
+
+    'default': {
+        'skin': 'moono',
+        # 'skin': 'office2013',
+        'toolbar_Basic': [
+            ['Source', '-', 'Bold', 'Italic']
+        ],
+        'toolbar_YourCustomToolbarConfig': [
+            {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+            {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll']},
+            {'name': 'forms',
+             'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
+                       'HiddenField']},
+            '/',
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
+                       'Language']},
+            {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
+            {'name': 'insert',
+             'items': ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
+            '/',
+            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
+            {'name': 'about', 'items': ['About']},
+            '/',  # put this to force next toolbar on new line
+            {'name': 'yourcustomtools', 'items': [
+                # put the name of your editor.ui.addButton here
+                'Preview',
+                'Maximize',
+                'Youtube'
+
+
+            ]},
+        ],
+        'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
+        # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
+        # 'height': 291,
+        # 'width': '100%',
+        # 'filebrowserWindowHeight': 725,
+        # 'filebrowserWindowWidth': 940,
+        # 'toolbarCanCollapse': True,
+        # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
+        'tabSpaces': 4,
+        'extraPlugins': ','.join([
+            'uploadimage', # the upload image feature
+            # your extra plugins here
+            'div',
+            'autolink',
+            'autoembed',
+            'embedsemantic',
+            'autogrow',
+            # 'devtools',
+            'widget',
+            'lineutils',
+            'clipboard',
+            'dialog',
+            'dialogui',
+            'elementspath',
+            'youtube'
+
+        ]),
+    },
+
+}

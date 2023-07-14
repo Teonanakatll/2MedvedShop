@@ -1,0 +1,38 @@
+html, body{
+  height: 100%;
+  max-height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+.top-container{
+  padding-top: 10%;
+}
+.form-control{
+    width: 400px;
+}
+.general-container{
+  background: url('../img/ind2.jpg');
+  background-size: 100%;
+  color: yellow;
+  height: 100%;
+}
+.general-container form label{
+    color: blue;
+    font-weight: 300;
+}
+.general-container form {
+    margin-top: 50px;
+}
+.btn-orange {
+    background-color: #e8643e;
+    border: none;
+}
+.btn-orange:hover {
+    background-color: #dc5129;
+    border: none;
+}
+.title{
+    color: yellow;
+    text-align: center;
+    font-weight: 300;
+    line-height: 50px;
+}
