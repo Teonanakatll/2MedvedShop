@@ -89,6 +89,17 @@ html, body{
     padding-bottom: 300px; /* must be same height as the footer */
 }
 
+.navbar-top {
+    height: 40px;
+    background-color: green;
+
+}
+
+.navbar-bottom {
+    height: 40px;
+    background-color: green;
+}
+
 .footer {
     position: bottom;
     height: 300px;

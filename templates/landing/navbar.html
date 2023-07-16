@@ -1,6 +1,13 @@
-<nav class="navbar navbar-top">
-  gdrfg
-</nav>
+<!--  user - берётся из контекствых переменных, он есть на любом темплейте  -->
+<div class="navbar-top">
+<!--  {{ user }}-->
+  {% if user.is_superuser %}
+    <div class="container text-center">
+      <a href="{% url 'admin_orders' %}" class="nav-link">Смотреть все заказы</a>
+    </div>
+  {% endif %}
+</div>
+
 <nav class="navbar navbar-main navbar-expand-lg">
   <div class="container-fluid bg-green text-white">
     <a class="navbar-brand" href="#">Navbar</a>
@@ -69,3 +76,9 @@
 
   </div>
 </nav>
+
+<div class="navbar-bottom">
+  <div class="container text-center">
+          <a href="{% url 'checkout' %}" class="nav-link">Оформить заказ</a>
+  </div>
+</div>

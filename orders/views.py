@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -36,7 +37,7 @@ def basket_adding(request):
 
         # Если запись уже существует обновляем количество товара
         if not created:
-            print("not created")
+            # print("not created")
             new_product.nmb += int(nmb)
             new_product.save(force_update=True)
 
@@ -61,7 +62,9 @@ def basket_adding(request):
 
 
 def checkout(request):
-    """ Функция отрисовывает список товаров из корзины."""
+    """ Функция отрисовывает список товаров из корзины, создаёт заказ и добавляет в него товары,
+            т.е. создаём ProductInOrder. """
+
     session_key = request.session.session_key
     # Выбираем товары в корзине по ключу сессии, исключая товары которые уже находятся в заказе (не null)
     products_in_basket = ProductInBasket.objects.filter(session_key=session_key, is_active=True, order__isnull=True)
@@ -110,3 +113,60 @@ def checkout(request):
             print("no")
 
     return render(request, 'orders/checkout.html', locals())
+
+def admin_orders(request):
+    # Второй уровень проверки что текущий пользователь это суперюзер. if user.is_superuser тогда выполняем
+    # весь код. Если нет-то return HttpResponseRedirect(reverce("home")
+    user = request.user
+
+    # Выбираем все существующие заказы и добавляем им поле 'products_nmb' котораму присваиваем
+    # значение количество связанных наименований товаров с каждым заказом
+    # values() - предостовляет данные в виде словоря (a не queryset), предоставляет записи только из текущей модели
+    # если необходимы записи из связанных моделей или их полей то нужно перечислить их в скобках ("...", "...")
+    orders = Order.objects.annotate(products_nmb=Count('productinorder')).values()
+
+    # Присваиваем переменной список со всеми id заказов
+    order_ids = [order["id"] for order in orders]
+
+    # Формируем список активных ProductInOrder, id заказов в которых находится в списке order_ids
+    # выбираем только поля в .values()
+    products_in_order = ProductInOrder.objects.filter(is_active=True, order_id__in=order_ids)\
+        .values("order_id", "product__name", "nmb", "price_per_item", "total_price")
+
+    # merging_dicts(orders (список словарей), products_in_order (список славарей), id, order_id)
+    def merging_dicts(l1, l2, key1, key2):
+        merged = {}
+        # print(l1)
+        # print(len(l1))
+        # Для каждого словаря в списке заказав
+        for item in l1:
+            # print(item[key1])
+            # Выбираем из каждого словаря элемент по ключу order["id"] - тоесть выбираем значение id заказа
+            # Добавляем в merged словарь: {"id заказа": {словарь заказа}}, выносим id заказа как ключ словаря
+            # значением которого будет список с полями этого заказа
+            merged[item[key1]] = item
+        # Для каждого словаря в списке product_in_order
+        for item in l2:
+            try:
+                # Берем значение по ключу "order_id" и используя его зночение как ключ для созданного словаря
+                # merged, проверяем существует ли в связанном славаре ключ "products".
+                if "products" in merged[item[key2]]:
+                    # Если существует то добавляем, к значению этого ключа (в список) текущий товар
+                    merged[item[key2]]["products"].append(item)
+                else:
+                    # Если не существует то создаём в заказе словарь с ключём "products"
+                    #  {products:[текущий продукт]} со списком
+                    # в который будем добавлять связанные товары
+                    merged[item[key2]]["products"] = [item]
+            except Exception as e:
+                return True
+
+        # Проходим циклом по словарю merged и создаём список с его зночениями, в итоге получаем список заказов
+        # в каждом из которых есть словарь "products" со списком связанных товаров
+
+        orders = [val for (_, val) in merged.items()]
+        return orders
+
+    orders = merging_dicts(list(orders), list(products_in_order), "id", "order_id")
+    return render(request, 'orders/admin_orders.html', locals())
+

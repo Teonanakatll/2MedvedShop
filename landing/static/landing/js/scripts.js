@@ -171,4 +171,13 @@ $(document).ready(function(){
     // При загрузке страницы подсчитываем общую стоимость корзины
     calculatingBasketAmount();
 
+     $(document).ready(function () {
+        $('#orders_table').DataTable(
+            {
+                "order": [[0, "asc"]],
+                "pageLength": 10,
+            }
+        );
+     });
+
 });
